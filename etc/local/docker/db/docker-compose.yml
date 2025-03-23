@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: lhv
+      POSTGRES_PASSWORD: lhv
+    ports:
+      - 5432:5432
