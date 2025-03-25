@@ -6,4 +6,4 @@ services:
       POSTGRES_USER: lhv
       POSTGRES_PASSWORD: lhv
     ports:
-      - 5432:5432
+      - 5437:5432
