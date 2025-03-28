@@ -8,7 +8,7 @@ CREATE TABLE sanctioned_name
     full_name       VARCHAR NOT NULL,
     normalized_name VARCHAR NOT NULL,
     phonetic_key    VARCHAR  NOT NULL,
-    created_at      TIMESTAMP DEFAULT NOW()
+    created_at      TIMESTAMP NOT NULL
 );
 
 comment on column sanctioned_name.full_name is 'Original sanctioned name';
