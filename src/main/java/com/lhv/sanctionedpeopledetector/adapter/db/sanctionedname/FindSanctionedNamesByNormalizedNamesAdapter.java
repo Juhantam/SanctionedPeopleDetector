@@ -20,7 +20,7 @@ public class FindSanctionedNamesByNormalizedNamesAdapter implements FindSanction
     @Override
     public Set<SanctionedName> execute(Request request) {
         if (request.getNormalizedNames().isEmpty()) {
-            throw new RuntimeException("Normalized names cannot be empty");
+            return Set.of();
         }
         return repository.findAllByNormalizedNameIn(request.getNormalizedNames())
                          .stream()

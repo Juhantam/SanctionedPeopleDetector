@@ -22,7 +22,7 @@ public class SaveSanctionedNamesAdapter implements SaveSanctionedNamesPort {
         return repository.saveAll(request.getSanctionedNames()
                                          .stream()
                                          .map(SanctionedNameEntity::of)
-                                         .collect(Collectors.toSet()))
+                                         .collect(Collectors.toList()))
                          .stream()
                          .map(SanctionedNameEntity::toDomain)
                          .collect(Collectors.toSet());

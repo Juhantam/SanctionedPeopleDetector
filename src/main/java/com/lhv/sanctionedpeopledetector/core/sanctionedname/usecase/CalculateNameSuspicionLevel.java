@@ -58,9 +58,9 @@ public class CalculateNameSuspicionLevel {
                 .build();
     }
 
-    private double calculateSuspicionScore(String input, String reference, String inputPhonetic, String referencePhonetic) {
-        String[] inputNames = input.split("\\s+");
-        String[] referenceNames = reference.split("\\s+");
+    private double calculateSuspicionScore(String inputName, String referenceNormalizedName, String inputPhoneticKey, String referencePhoneticKey) {
+        String[] inputNames = inputName.split("\\s+");
+        String[] referenceNames = referenceNormalizedName.split("\\s+");
 
         double maxNameMatch = 0.0;
         for (String name : inputNames) {
@@ -74,12 +74,12 @@ public class CalculateNameSuspicionLevel {
             }
         }
 
-        double nameSimilarity = 1.0 - ((double) levenshteinDistance.apply(input, reference) / Math.max(input.length(), reference.length()));
-        boolean phoneticMatch = inputPhonetic.equals(referencePhonetic);
+        double nameSimilarity = 1.0 - ((double) levenshteinDistance.apply(inputName, referenceNormalizedName) / Math.max(inputName.length(), referenceNormalizedName.length()));
+        boolean phoneticMatch = inputPhoneticKey.equals(referencePhoneticKey);
 
-        double nameMatchBoost = calculateNameMatchBoost(input, reference);
+        double nameMatchBoost = calculateNameMatchBoost(inputName, referenceNormalizedName);
 
-        return (maxNameMatch * 40) + (nameSimilarity * 30) + (phoneticMatch ? 20 : 0) + nameMatchBoost;
+        return (maxNameMatch * 20) + (nameSimilarity * 30) + (phoneticMatch ? 20 : 0) + nameMatchBoost;
     }
 
     private double calculateNameMatchBoost(String input, String reference) {

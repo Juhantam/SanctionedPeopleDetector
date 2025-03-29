@@ -28,22 +28,32 @@ public class SaveSanctionedNames {
             return null;
         }
 
-        Map<String, String> normalizedNamesByFullNames = preProcessNames.execute(PreProcessNames.Request.builder()
-                .names(request.getNames())
-                .build());
-        Set<SanctionedName> knownSanctionedNames = findSanctionedNamesByNormalizedNamesPort
-                .execute(FindSanctionedNamesByNormalizedNamesPort.Request.of(new HashSet<>(normalizedNamesByFullNames.values())));
+        Map<String, String> normalizedNamesByFullNames =
+                preProcessNames.execute(PreProcessNames.Request.builder()
+                        .names(request.getNames())
+                        .build());
+        Set<SanctionedName> knownSanctionedNames =
+                findSanctionedNamesByNormalizedNamesPort.execute(FindSanctionedNamesByNormalizedNamesPort.Request.of(new HashSet<>(normalizedNamesByFullNames.values())));
         Set<String> knownNormalizedNames = knownSanctionedNames.stream()
                 .map(SanctionedName::getNormalizedName)
                 .collect(Collectors.toSet());
 
-        normalizedNamesByFullNames.entrySet().removeIf(entry -> knownNormalizedNames.contains(entry.getValue()));
+        normalizedNamesByFullNames.entrySet()
+                .removeIf(entry -> knownNormalizedNames.contains(entry.getValue()));
 
 
         return saveSanctionedNamesPort.execute(SaveSanctionedNamesPort.Request.of(normalizedNamesByFullNames.entrySet()
-                        .stream()
+                .stream()
                 .map(entry -> this.composeSanctionedName(entry.getKey(), entry.getValue()))
+                .filter(SaveSanctionedNames::filterInvalidData)
                 .collect(Collectors.toSet())));
+    }
+
+    private static boolean filterInvalidData(SanctionedName sanctionedName) {
+        String normalizedName = sanctionedName.getNormalizedName();
+        String phoneticKey = sanctionedName.getPhoneticKey();
+        return normalizedName != null && !normalizedName.isEmpty() &&
+                phoneticKey != null && !phoneticKey.isEmpty();
     }
 
     private SanctionedName composeSanctionedName(String fullName, String normalizedName) {
