@@ -39,6 +39,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.wiremock:wiremock-standalone:3.0.1'
+    testImplementation 'com.h2database:h2'
 }
 
 tasks.named('test') {

@@ -3,11 +3,13 @@ package com.lhv.sanctionedpeopledetector.web.sanctionedname.dto;
 import com.lhv.sanctionedpeopledetector.core.sanctionedname.model.SanctionedName;
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDateTime;
 
 @Value
 @Builder
+@Jacksonized
 public class SanctionedNameDto {
     Long id;
     String fullName;

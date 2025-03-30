@@ -7,6 +7,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 
 import java.io.FileReader;
 import java.util.HashSet;
@@ -17,7 +18,8 @@ import java.util.regex.Pattern;
 
 @UseCase
 @RequiredArgsConstructor
-public class UpdateSanctionedNamesInBase {
+@Profile("!test")
+public class UpdateSanctionedNamesInBaseFromCsv {
     private static final String INPUT_FILE_NAME = "src/main/resources/data/SanctionedNames.csv";
 
     private final SaveSanctionedNames saveSanctionedNames;
