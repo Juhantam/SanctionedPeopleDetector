@@ -85,18 +85,47 @@ public class CalculateNameSuspicionLevel {
     private double calculateNameMatchBoost(String input, String reference) {
         String[] inputNames = input.split("\\s+");
         String[] referenceNames = reference.split("\\s+");
-        int nameMatches = 0;
+        double suspicionScore = 0.0;
+        int matchedNames = 0;
 
         for (String inputName : inputNames) {
+            boolean hasGoodMatch = false;
+            boolean hasBestMatch = false;
+
             for (String refName : referenceNames) {
                 int nameDistance = levenshteinDistance.apply(inputName, refName);
-                if (nameDistance <= 2) {
-                    nameMatches++;
+
+                if (nameDistance == 0) {
+                    suspicionScore += 12;
+                    hasBestMatch = true;
+                } else if (!hasBestMatch && nameDistance == 1) {
+                    suspicionScore += 11;
+                    hasGoodMatch = true;
+                } else if (!hasBestMatch && nameDistance == 2) {
+                    suspicionScore += 10;
+                    hasGoodMatch = true;
+                } else if (!hasBestMatch && nameDistance == 3) {
+                    suspicionScore += 5;
+                    hasGoodMatch = true;
+                } else if (!hasGoodMatch && !hasBestMatch && nameDistance >= 4) {
+                    suspicionScore -= 2.5;
                 }
+            }
+
+            if (hasGoodMatch || hasBestMatch) {
+                matchedNames++;
             }
         }
 
-        return nameMatches * 10.0; // Increase suspicion level by 10 per matching name
+        if (inputNames.length < referenceNames.length / 2) {
+            suspicionScore += 5;
+        }
+
+        if (matchedNames >= inputNames.length - 1) {
+            suspicionScore = Math.max(suspicionScore, 25);
+        }
+
+        return suspicionScore;
     }
 
     @Value

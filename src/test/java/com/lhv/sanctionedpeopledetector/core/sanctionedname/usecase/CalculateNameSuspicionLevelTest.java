@@ -163,8 +163,8 @@ class CalculateNameSuspicionLevelTest {
 
     private Set<SanctionedName> composeSanctionedNames() {
         return Set.of(SanctionedName.builder()
-                .fullName("Osama Bin Laden")
-                .normalizedName("osama bin laden")
+                .fullName("Osama bin Muhammad bin Awad bin Ladin")
+                .normalizedName("osama bin muhammad bin awad bin ladin")
                 .phoneticKey("O251")
                 .build());
     }
