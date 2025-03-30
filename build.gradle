@@ -38,6 +38,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'org.wiremock:wiremock-standalone:3.0.1'
 }
 
 tasks.named('test') {

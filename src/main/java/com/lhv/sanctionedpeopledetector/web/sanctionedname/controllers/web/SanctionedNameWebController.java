@@ -1,6 +1,7 @@
 package com.lhv.sanctionedpeopledetector.web.sanctionedname.controllers.web;
 
 import com.lhv.sanctionedpeopledetector.core.sanctionedname.model.SanctionedName;
+import com.lhv.sanctionedpeopledetector.core.sanctionedname.port.DeleteSanctionedNamesByIdsPort;
 import com.lhv.sanctionedpeopledetector.core.sanctionedname.port.FindSanctionedNamesByNormalizedNamesPort;
 import com.lhv.sanctionedpeopledetector.core.sanctionedname.usecase.CalculateNameSuspicionLevel;
 import com.lhv.sanctionedpeopledetector.core.sanctionedname.usecase.SaveSanctionedNames;
@@ -8,12 +9,7 @@ import com.lhv.sanctionedpeopledetector.web.sanctionedname.dto.NameSuspicionLeve
 import com.lhv.sanctionedpeopledetector.web.sanctionedname.dto.SanctionedNameDto;
 import com.lhv.sanctionedpeopledetector.web.sanctionedname.dto.SaveSanctionedNamesRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,6 +21,7 @@ public class SanctionedNameWebController {
     private final CalculateNameSuspicionLevel calculateNameSuspicionLevel;
     private final SaveSanctionedNames saveSanctionedNames;
     private final FindSanctionedNamesByNormalizedNamesPort findSanctionedNamesByNormalizedNames;
+    private final DeleteSanctionedNamesByIdsPort deleteSanctionedNamesByIdsPort;
 
     @GetMapping
     public Set<String> test() {
@@ -49,5 +46,10 @@ public class SanctionedNameWebController {
                                   .stream()
                                   .map(SanctionedNameDto::of)
                                   .collect(Collectors.toSet());
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteSanctionedNamesByIds(@RequestParam Set<Long> ids) {
+        deleteSanctionedNamesByIdsPort.execute(DeleteSanctionedNamesByIdsPort.Request.of(ids));
     }
 }
